@@ -20,8 +20,8 @@ As with installation, each bot has its own unique usage instructions. Detailed d
 ### Bots Included
 This repository contains a plethora of bots, each tailored for different purposes. A few of the bots included are:
 
-ModerationBot: A bot to moderate your discord server
-NewsBot: A bot for getting News.
+- ModerationBot: A bot to moderate your discord server
+- NewsBot: A bot for getting News.
 
 
 ### Contributing
