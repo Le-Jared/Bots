@@ -22,6 +22,7 @@ This repository contains a plethora of bots, each tailored for different purpose
 
 - ModerationBot: A bot to moderate your discord server
 - NewsBot: A bot for getting News.
+- MusicBot: Play your favourite Music on Discord
 
 
 ### Contributing
