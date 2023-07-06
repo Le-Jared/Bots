@@ -26,7 +26,7 @@ This repository contains a plethora of bots, each tailored for different purpose
 
 
 ### Contributing
-Contributions are always welcome. Please read the CONTRIBUTING.md file for our coding conventions and branching strategy.
+Contributions are always welcome. Please read the [BotHub Contribution](./CONTRIBUTING.md) file for our coding conventions and branching strategy.
 
 ### License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
