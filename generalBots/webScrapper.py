@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import os
+import time
 
 def scrape_website(url):
     headers = {
@@ -21,8 +23,20 @@ def write_to_file(data, filename):
         writer = csv.writer(f)
         writer.writerow(data)
 
+def check_file_exists(filename):
+    if not os.path.isfile(filename):
+        with open(filename, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(["Title", "Description"])
+
+def clean_data(data):
+    return ' '.join(data.split())
+
 def main():
     base_url = "http://example.com"  # replace with the url you want to scrape
+    filename = 'output.csv'
+    check_file_exists(filename)
+    
     for i in range(1, 6):  # adjust range according to the number of pages you want to scrape
         url = f"{base_url}/page/{i}"  
         soup = scrape_website(url)
@@ -34,12 +48,20 @@ def main():
         items = soup.find_all('div', attrs={'class': 'item'})
 
         for item in items:
-            # Assume each item has a 'title' in a h2 tag and 'description' in a p tag
-            title = item.find('h2').text
-            description = item.find('p').text
-            
-            # Write the data to a CSV file
-            write_to_file([title, description], 'output.csv')
+            try:
+                # Assume each item has a 'title' in a h2 tag and 'description' in a p tag
+                title = clean_data(item.find('h2').text)
+                description = clean_data(item.find('p').text)
+                
+                # Write the data to a CSV file
+                write_to_file([title, description], filename)
+                
+            except Exception as e:
+                print(f"Error when processing an item: {e}")
+        
+        # Delay between requests
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
+
