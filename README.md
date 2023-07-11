@@ -21,8 +21,9 @@ As with installation, each bot has its own unique usage instructions. Detailed d
 This repository contains a plethora of bots, each tailored for different purposes. A few of the bots included are:
 
 - ModerationBot: A bot to moderate your discord server
-- NewsBot: A bot for getting News.
+- NewsBot: A bot for getting News
 - MusicBot: Play your favourite Music on Discord
+- Chatbot: Includes feedback training
 
 
 ### Contributing
