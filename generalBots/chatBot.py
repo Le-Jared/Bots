@@ -22,9 +22,9 @@ class LowConfidenceAdapter(LogicAdapter):
 
         return response
 
-# Create a new chat bot named Charlie
+# Create a new chat bot 
 chatbot = ChatBot(
-    'Charlie',
+    'Sarah',
     logic_adapters=[
         'chatterbot.logic.BestMatch',
         {'import_path': 'LowConfidenceAdapter'}
@@ -45,5 +45,13 @@ while True:
         response = chatbot.get_response(user_input)
         print("ChatBot: ", response)
 
+        # Ask for feedback
+        feedback = input("Was this response helpful? (Yes/No): ")
+        if feedback.lower() == 'no':
+            correct_response = input("What should the response have been?: ")
+            # Train the chatbot with the correct response
+            trainer.train([user_input, correct_response])
+
     except(KeyboardInterrupt, EOFError, SystemExit):
         break
+
