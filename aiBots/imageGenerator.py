@@ -6,7 +6,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 from IPython import display
-
+import numpy as np
 
 # Load and preprocess the dataset
 (train_images, train_labels), (_, _) = mnist.load_data()
@@ -15,6 +15,10 @@ train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
 BUFFER_SIZE = 60000
 BATCH_SIZE = 256
 train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+
+cross_entropy = BinaryCrossentropy(from_logits=True)
+generator_optimizer = Adam(1e-4)
+discriminator_optimizer = Adam(1e-4)
 
 # Generator
 def make_generator_model():
@@ -56,7 +60,7 @@ generator_optimizer = Adam(1e-4)
 discriminator_optimizer = Adam(1e-4)
 
 @tf.function
-def train_step(images):
+def train_step(images, generator, discriminator):
     noise = tf.random.normal([BATCH_SIZE, 100])
 
     with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
@@ -74,23 +78,23 @@ def train_step(images):
     generator_optimizer.apply_gradients(zip(gradients_of_generator, generator.trainable_variables))
     discriminator_optimizer.apply_gradients(zip(gradients_of_discriminator, discriminator.trainable_variables))
 
-def train(dataset, epochs):
+    return gen_loss, disc_loss
+
+def train(dataset, epochs, generator, discriminator, seed):
     for epoch in range(epochs):
+        gen_losses = []
+        disc_losses = []
+
         for image_batch in dataset:
-            train_step(image_batch)
+            gen_loss, disc_loss = train_step(image_batch, generator, discriminator)
+            gen_losses.append(gen_loss)
+            disc_losses.append(disc_loss)
 
-        # Produce images for the GIF as we go
-        display.clear_output(wait=True)
-        generate_and_save_images(generator,
-                                 epoch + 1,
-                                 seed)
-    
-    # Generate after the final epoch
+        print(f'Epoch {epoch+1}, Generator Loss: {np.mean(gen_losses)}, Discriminator Loss: {np.mean(disc_losses)}')
+        generate_and_save_images(generator, epoch + 1, seed)
+
     display.clear_output(wait=True)
-    generate_and_save_images(generator,
-                           epochs,
-                           seed)
-
+    generate_and_save_images(generator, epochs, seed)
 
 def generate_and_save_images(model, epoch, test_input):
     predictions = model(test_input, training=False)
@@ -109,10 +113,8 @@ generator = make_generator_model()
 discriminator = make_discriminator_model()
 
 EPOCHS = 50
-train(train_dataset, EPOCHS)
 noise_dim = 100
 num_examples_to_generate = 16
-
 seed = tf.random.normal([num_examples_to_generate, noise_dim])
 
-train(train_dataset, EPOCHS)
+train(train_dataset, EPOCHS, generator, discriminator, seed)
