@@ -9,6 +9,7 @@ This repository contains a plethora of bots, each tailored for different purpose
 - NewsBot: A bot for getting News
 - MusicBot: Play your favourite Music on Discord
 - Chatbot: Includes feedback training
+- ImageBot: Image Generation
 
 ### License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
