@@ -1,4 +1,4 @@
-# BotHub
+# Scrapy
 This repository, "Scrapy," is a consolidated codebase housing an array of uniquely designed and functional bots that serve a multitude of purposes. The main ones are Web Scrapper and other bots included below.
 
 ### Bots Included
